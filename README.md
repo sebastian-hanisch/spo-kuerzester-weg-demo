@@ -1,7 +1,6 @@
 # Der kürzeste Weg und der SPO-Verlust: der Löser in der Schleife – Streamlit-Demo
 
-<!-- TODO nach dem Deploy: direkt hierher den Live-Link setzen (Leerzeile davor und danach):
-**[→ Demo live ausprobieren](https://sebastianhanisch-spo-kuerzester-weg-demo.streamlit.app/)** -->
+**[→ Demo live ausprobieren](https://sebastianhanisch-spo-kuerzester-weg-demo.streamlit.app/)**
 
 Stück der Reihe **Entscheidungsorientiertes Lernen** in der „Konzepte“-Reihe für die Website „Sebastian Hanisch – Operations Research und Machine Learning“. Vehikel ist ein abstraktes **5 × 5 Gitter** (Wege von links oben nach rechts unten, 40 Bögen, 70 Wege): Aus Merkmalen sollen Bogenkosten vorhergesagt werden, und ein exakter Löser (eine Rückwärtsrechnung, das Gitter ist azyklisch) wählt daraus den kürzesten Weg. Die Demo trainiert dasselbe lineare Modell auf zwei Arten, mit **Kleinsten Quadraten (KQ)** auf dem Fehler der Kosten und mit **SPO+** auf dem Regret des gewählten Weges, bei dem der **Löser in jeder Trainingsrunde läuft**.
 
