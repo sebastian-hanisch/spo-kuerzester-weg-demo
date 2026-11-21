@@ -130,21 +130,21 @@ def verdict_forecast(regret_kq: float, regret_spo: float, mse_kq: float, mse_spo
 
 
 def band_rows(deg: int, n: int, noise: float) -> list[dict]:
-    """Zeilen der Tabelle für eine Zelle: Orakel, KQ, SPO+ (eigene Messung) und Zufallswald (Vormessung, nicht live)."""
+    """Zeilen der Tabelle für eine Zelle: Orakel, KQ, SPO+ (eigene Messung) und Random Forest (Vormessung, nicht live)."""
     c, w = B.cell(deg, n, noise), B.wald_cell(deg, n, noise)
     s = c["summary"]
     return [
         {"Verfahren": "Orakel (kennt die mittleren Kosten)", "quelle": "eigene Messung", "regret": s["regret_orakel"], "mse": None},
         {"Verfahren": "KQ (linear)", "quelle": "eigene Messung", "regret": s["regret_kq"], "mse": s["mse_kq"]["median"]},
         {"Verfahren": "SPO+ (linear, 300 Schritte)", "quelle": "eigene Messung", "regret": s["regret_spo"], "mse": s["mse_spo"]["median"]},
-        {"Verfahren": "Zufallswald (nicht live)", "quelle": "Vormessung mit scikit-learn", "regret": w["regret_wald"], "mse": w["mse_wald"]},
+        {"Verfahren": "Random Forest (nicht live)", "quelle": "Vormessung mit scikit-learn", "regret": w["regret_wald"], "mse": w["mse_wald"]},
     ]
 
 
 # --- Experiment 5: Datenmenge und Rauschen -----------------------------------------------------------------------------------------------
 
 def grid_rows(deg: int) -> list[dict]:
-    """Die sechs Zellen (n x Rauschen) zu einem Grad aus der eigenen Messung, dazu der Zufallswald der Vormessung."""
+    """Die sechs Zellen (n x Rauschen) zu einem Grad aus der eigenen Messung, dazu der Random Forest der Vormessung."""
     rows = []
     for noise in C.NOISE_CHOICES:
         for n in C.N_CHOICES:
@@ -226,7 +226,7 @@ def verdict_ranking(rows: list[dict]) -> tuple[str, str]:
     best_q = min(cand, key=lambda r: (_shown(r["mse"], 2), r["regret"]["median"]))
     short = lambda r: r["Verfahren"].split(" (")[0]
     if best_r is best_q:
-        return "info", f"{short(best_r)} hat zugleich das kleinste Regret ({de(best_r['regret']['median'])} %) und den kleinsten Quadratfehler je Bogen ({de(best_r['mse'], 2)}) unter KQ, SPO+ und Zufallswald."
+        return "info", f"{short(best_r)} hat zugleich das kleinste Regret ({de(best_r['regret']['median'])} %) und den kleinsten Quadratfehler je Bogen ({de(best_r['mse'], 2)}) unter KQ, SPO+ und Random Forest."
     return "success", (
         f"Das kleinste Regret hat {short(best_r)} ({de(best_r['regret']['median'])} %, Quadratfehler je Bogen {de(best_r['mse'], 2)}); "
         f"den kleinsten Quadratfehler hat {short(best_q)} ({de(best_q['mse'], 2)}, Regret {de(best_q['regret']['median'])} %): "

@@ -4,7 +4,7 @@ Zahlen-Tabelle der README -> Test:
 
 | README | Test |
 |---|---|
-| Raster ohne und mit Rauschen, Lernkurve, Strafe, Schritte, Stabilitätsprobe, Zufallswald-Tabelle | `test_readme_contains_every_generated_table_line` (wörtlich aus den JSON-Dateien erzeugt) |
+| Raster ohne und mit Rauschen, Lernkurve, Strafe, Schritte, Stabilitätsprobe, Random Forest-Tabelle | `test_readme_contains_every_generated_table_line` (wörtlich aus den JSON-Dateien erzeugt) |
 | Bestes Regret, schlechteste Prognose (Grad 6, n = 5000) | `test_best_regret_with_the_worst_forecast` |
 | Grad 1: nichts zu gewinnen | `test_linear_truth_leaves_nothing_to_win` |
 | Wo gewinnt SPO+ (ohne und mit Rauschen) | `test_where_spo_plus_wins_without_noise`, `test_where_spo_plus_wins_with_noise` |
@@ -14,7 +14,7 @@ Zahlen-Tabelle der README -> Test:
 | Strafe und früher Abbruch | `test_penalty_and_early_stopping_do_not_help_with_noise` |
 | Lernkurve (99 %, Spanne) | `test_learning_curve_is_flat_after_25_steps_without_noise` |
 | Korrekturen gegenüber dem Plan (Vormessungszahlen) | `test_plan_numbers_versus_this_measurement` |
-| Vormessung: Zufallswald, Kern-Ridge | `test_frozen_forest_cells_hold_the_numbers_of_the_pre_measurement`, `test_kernel_ridge_numbers_of_the_pre_measurement` |
+| Vormessung: Random Forest, Kern-Ridge | `test_frozen_forest_cells_hold_the_numbers_of_the_pre_measurement`, `test_kernel_ridge_numbers_of_the_pre_measurement` |
 | Messung dieser Demo (Seeds, Schritte, Lernrate) | `test_band_file_describes_the_documented_setup`, `test_live_run_reproduces_the_bands` |
 | Löser- und SPO+-Prüfungen der README (Scratch-Läufe) | nicht im Repo: Scratch-Läufe mit 300 bzw. 2000 Instanzen; im Repo die kleine Fassung in `test_oracle_spo_kuerzester_weg.py` |
 

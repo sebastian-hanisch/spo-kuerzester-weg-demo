@@ -88,7 +88,7 @@ def test_grid_rows_and_band_rows_have_the_expected_shape():
     rows = ev.grid_rows(6)
     assert [(r["n"], r["noise"]) for r in rows] == [(100, 0.0), (1000, 0.0), (5000, 0.0), (100, 0.5), (1000, 0.5), (5000, 0.5)]
     br = ev.band_rows(6, 1000, 0.0)
-    assert [r["Verfahren"].split(" (")[0] for r in br] == ["Orakel", "KQ", "SPO+", "Zufallswald"]
+    assert [r["Verfahren"].split(" (")[0] for r in br] == ["Orakel", "KQ", "SPO+", "Random Forest"]
     assert br[0]["mse"] is None and br[3]["quelle"].startswith("Vormessung")
 
 

@@ -60,6 +60,6 @@ def build_pdf(settings: Settings, run) -> bytes:
         f"SPO+ {de(h['spo_plus'])}, Teilgradient ({de(h['subgradient'][0])}; {de(h['subgradient'][1])}), Quadratfehler {de(h['sq'])}."), new_x="LMARGIN", new_y="NEXT")
     pdf.ln(3)
     pdf.set_font("Helvetica", "I", 8)
-    pdf.multi_cell(0, 4, _s("Der kürzeste Weg und der SPO-Verlust: SPO+ gegen Kleinste Quadrate im Gitter. Zufallswald: Vormessung mit scikit-learn, nicht live. Quelle: spo-kuerzester-weg-demo, Sebastian Hanisch."),
+    pdf.multi_cell(0, 4, _s("Der kürzeste Weg und der SPO-Verlust: SPO+ gegen Kleinste Quadrate im Gitter. Random Forest: Vormessung mit scikit-learn, nicht live. Quelle: spo-kuerzester-weg-demo, Sebastian Hanisch."),
                    new_x="LMARGIN", new_y="NEXT")
     return bytes(pdf.output())

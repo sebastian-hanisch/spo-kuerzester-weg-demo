@@ -116,12 +116,12 @@ def test_verdict_ranking_names_different_winners():
         {"Verfahren": "Orakel (kennt die mittleren Kosten)", "regret": _S(0.0), "mse": None},
         {"Verfahren": "KQ (linear)", "regret": _S(1.9), "mse": 0.65},
         {"Verfahren": "SPO+ (linear, 300 Schritte)", "regret": _S(0.5), "mse": 1.31},
-        {"Verfahren": "Zufallswald (nicht live)", "regret": _S(0.8), "mse": 0.29},
+        {"Verfahren": "Random Forest (nicht live)", "regret": _S(0.8), "mse": 0.29},
     ]
     kind, text = ev.verdict_ranking(rows)
     assert kind == "success"
     assert "Das kleinste Regret hat SPO+ (0,5 %, Quadratfehler je Bogen 1,31)" in text
-    assert "den kleinsten Quadratfehler hat Zufallswald (0,29, Regret 0,8 %)" in text
+    assert "den kleinsten Quadratfehler hat Random Forest (0,29, Regret 0,8 %)" in text
 
 
 def test_verdict_ranking_same_winner_is_neutral():
@@ -129,7 +129,7 @@ def test_verdict_ranking_same_winner_is_neutral():
         {"Verfahren": "Orakel (kennt die mittleren Kosten)", "regret": _S(0.0), "mse": None},
         {"Verfahren": "KQ (linear)", "regret": _S(0.0), "mse": 0.0},
         {"Verfahren": "SPO+ (linear, 300 Schritte)", "regret": _S(0.1), "mse": 0.01},
-        {"Verfahren": "Zufallswald (nicht live)", "regret": _S(0.7), "mse": 0.02},
+        {"Verfahren": "Random Forest (nicht live)", "regret": _S(0.7), "mse": 0.02},
     ]
     kind, text = ev.verdict_ranking(rows)
     assert kind == "info" and text.startswith("KQ hat zugleich das kleinste Regret (0,0 %)")

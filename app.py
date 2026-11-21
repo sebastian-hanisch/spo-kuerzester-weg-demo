@@ -81,7 +81,7 @@ with st.expander("So funktioniert der Löser in der Schleife", expanded=True):
 1. **Kosten vorhersagen:** ein lineares Modell macht aus den Merkmalen $x$ einen Kostenvektor $\\hat c$ für alle 40 Bögen. Das Merkmal-Kosten-Muster der Welt ist nichtlinear (Grad 1 bis 6): ein lineares Modell kann es nur annähern.
 2. **Den Löser fragen:** das Gitter ist azyklisch, der kürzeste Weg unter $\\hat c$ ist eine Rückwärtsrechnung über die Knoten. Der gewählte Weg wird mit den **wahren** Kosten bewertet: die Differenz zum besten Weg ist der **SPO-Verlust** (Regret).
 3. **Den Regret trainieren:** der SPO-Verlust ist stückweise konstant, sein Gradient fast überall null. **SPO+** ist eine konvexe obere Schranke mit einem Teilgradienten, der zwei Löseraufrufe je Fall braucht (auf $c$ und auf $2\\hat c - c$): $2\\,(w^*(c) - w(2\\hat c - c))$.
-4. **Vergleichen:** KQ (Quadratfehler der Kosten) gegen SPO+ (Regret des Weges) mit demselben linearen Modell, 240 Parametern und denselben Daten; der Zufallswald kommt als eingefrorene Vormessung dazu (nicht live).
+4. **Vergleichen:** KQ (Quadratfehler der Kosten) gegen SPO+ (Regret des Weges) mit demselben linearen Modell, 240 Parametern und denselben Daten; der Random Forest kommt als eingefrorene Vormessung dazu (nicht live).
         """
     )
 
@@ -235,7 +235,7 @@ st.markdown("---")
 st.subheader("🔬 Experiment 4: Entscheidung gegen Prognose")
 st.markdown(
     f"Regret und mittlerer quadratischer Fehler je Bogen für die gewählte Zelle (Grad {int(deg)}, Rauschstufe {de(noise)}, n = {int(n)}), **Median über {len(band['regret_kq'])} Zufalls-Seeds**. "
-    "KQ, SPO+ und Orakel sind eigene Messungen dieser Demo; der **Zufallswald** ist eine Vormessung mit scikit-learn (100 Bäume, nicht abgestimmt) und wird hier **nicht live gerechnet**."
+    "KQ, SPO+ und Orakel sind eigene Messungen dieser Demo; der **Random Forest** ist eine Vormessung mit scikit-learn (100 Bäume, nicht abgestimmt) und wird hier **nicht live gerechnet**."
 )
 rows4 = band_rows(int(deg), int(n), float(noise))
 st.plotly_chart(build_forecast_figure(rows4), width="stretch", key="forecast_chart")
@@ -260,7 +260,7 @@ rows5 = grid_rows(int(deg))
 st.plotly_chart(build_grid_scan_figure(rows5), width="stretch", key="scan_chart")
 table5 = pd.DataFrame([
     {"n": r["n"], "Rauschstufe": de(r["noise"]), "Orakel": f"{de(r['orakel'])} %", "KQ": f"{de(r['kq']['median'])} %", "SPO+": f"{de(r['spo']['median'])} %",
-     "SPO+ besser als KQ": f"{r['besser']} von {r['seeds']} Seeds", "Zufallswald (Vormessung)": f"{de(r['wald'])} %"} for r in rows5
+     "SPO+ besser als KQ": f"{r['besser']} von {r['seeds']} Seeds", "Random Forest (Vormessung)": f"{de(r['wald'])} %"} for r in rows5
 ])
 st.dataframe(table5, hide_index=True, width="stretch")
 kind, text = verdict_grid(int(deg), rows5)

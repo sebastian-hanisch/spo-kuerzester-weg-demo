@@ -99,7 +99,7 @@ def build_curve_figure(curve: dict, train_losses: np.ndarray, best_step: int, r_
 
 # --- Experiment 4: Entscheidung gegen Prognose -------------------------------------------------------------------------------------------------
 
-_COLORS = {"Orakel": C.COLOR_ORACLE, "KQ": C.COLOR_KQ, "SPO+": C.COLOR_SPO, "Zufallswald": C.COLOR_WALD}
+_COLORS = {"Orakel": C.COLOR_ORACLE, "KQ": C.COLOR_KQ, "SPO+": C.COLOR_SPO, "Random Forest": C.COLOR_WALD}
 
 
 def _short(name: str) -> str:
@@ -127,12 +127,12 @@ def build_forecast_figure(rows: list[dict]) -> go.Figure:
 # --- Experiment 5: Datenmenge und Rauschen -----------------------------------------------------------------------------------------------------
 
 def build_grid_scan_figure(rows: list[dict]) -> go.Figure:
-    """Zwei Teilbilder (ohne und mit Rauschen), je n = 100 / 1000 / 5000: Median-Regret von Orakel, KQ, SPO+ (mit Spanne über die Seeds) und Zufallswald (Vormessung)."""
+    """Zwei Teilbilder (ohne und mit Rauschen), je n = 100 / 1000 / 5000: Median-Regret von Orakel, KQ, SPO+ (mit Spanne über die Seeds) und Random Forest (Vormessung)."""
     fig = make_subplots(rows=1, cols=2, subplot_titles=("ohne Rauschen", "mit Rauschen (0,5)"), horizontal_spacing=0.1)
     for col, noise in enumerate(C.NOISE_CHOICES, start=1):
         sel = [r for r in rows if r["noise"] == noise]
         xs = [f"n = {r['n']}" for r in sel]
-        for name, key, color in (("Orakel", "orakel", C.COLOR_ORACLE), ("KQ", "kq", C.COLOR_KQ), ("SPO+", "spo", C.COLOR_SPO), ("Zufallswald", "wald", C.COLOR_WALD)):
+        for name, key, color in (("Orakel", "orakel", C.COLOR_ORACLE), ("KQ", "kq", C.COLOR_KQ), ("SPO+", "spo", C.COLOR_SPO), ("Random Forest", "wald", C.COLOR_WALD)):
             ys = [r[key]["median"] if isinstance(r[key], dict) else r[key] for r in sel]
             err = None
             if key in ("kq", "spo"):

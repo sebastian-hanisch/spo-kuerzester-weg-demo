@@ -34,7 +34,7 @@ def main_table(noise: float) -> list[str]:
 
 
 def forest_table() -> list[str]:
-    """Vormessung (scikit-learn, nicht live): Zufallswald, Regret (Median) und Quadratfehler je Bogen (Median) je Zelle zu Grad 6, dazu SPO+ der Vormessung (600 Schritte)."""
+    """Vormessung (scikit-learn, nicht live): Random Forest, Regret (Median) und Quadratfehler je Bogen (Median) je Zelle zu Grad 6, dazu SPO+ der Vormessung (600 Schritte)."""
     lines = ["| n | Rauschstufe | Wald Regret | Wald Quadratfehler | KQ Quadratfehler | SPO+ (600 Schritte, Vormessung) Regret | SPO+ besser als KQ (Vormessung) |", "|---|---|---|---|---|---|---|"]
     for noise in C.NOISE_CHOICES:
         for n in C.N_CHOICES:

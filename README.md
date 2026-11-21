@@ -8,7 +8,7 @@ Stück der Reihe **Entscheidungsorientiertes Lernen** in der „Konzepte“-Reih
 
 Wer Kosten vorhersagt und dann optimiert, bewertet das Modell meist nach dem Fehler der Kosten. Für die Entscheidung zählt aber nur, ob der gewählte Weg gut ist: Ein Modell kann die Kosten schlecht treffen und trotzdem den richtigen Weg wählen, und umgekehrt. Die Kernfrage der Demo: **Rettet SPO+ ein falsches lineares Modell, und wann nicht?**
 
-- **Bestes Regret, schlechteste Prognose:** In der Welt mit Grad 6 ohne Rauschen und n = 5000 hat SPO+ ein Viertel des Regrets von KQ (Median 0,5 gegen 2,0 %), aber einen 1,8-fachen Quadratfehler je Bogen (1,39 gegen 0,76). Der Zufallswald der Vormessung (andere Seeds und Zufallsquelle) hat dort mit 0,29 den kleinsten Quadratfehler, sein Regret liegt bei 0,8 %.
+- **Bestes Regret, schlechteste Prognose:** In der Welt mit Grad 6 ohne Rauschen und n = 5000 hat SPO+ ein Viertel des Regrets von KQ (Median 0,5 gegen 2,0 %), aber einen 1,8-fachen Quadratfehler je Bogen (1,39 gegen 0,76). Der Random Forest der Vormessung (andere Seeds und Zufallsquelle) hat dort mit 0,29 den kleinsten Quadratfehler, sein Regret liegt bei 0,8 %.
 - **Gewinn nur bei nichtlinearer Wahrheit:** Bei Grad 1 hat KQ ohne Rauschen einen Regret von 0,0 % und SPO+ ist in keinem der 20 Seeds besser. Ab Grad 4 senkt SPO+ ohne Rauschen bei n = 1000 den Regret in allen 20 Seeds.
 - **Es gilt nicht überall:** Mit Rauschen schließt SPO+ nur einen Teil der Lücke zwischen KQ und Orakel, und bei wenig Daten (n = 100) liegt SPO+ mit Rauschen in den Welten mit Grad 1, 2 und 4 hinter KQ. Gegen eine flexible Modellklasse (Vormessung mit Gauß-Kern-Ridge, Grad 6) liegt SPO+ ohne Rauschen klar zurück; mit Rauschen ist der Abstand klein und nicht in jeder Zelle zugunsten der flexiblen Klasse. Der Satz der Demo ist deshalb eng: SPO+ rettet das falsche **lineare** Modell, unter diesen Bedingungen; er sagt nicht „SPO+ ist besser“.
 
@@ -31,7 +31,7 @@ Die Herleitung (Konvexität, obere Schranke, Teilgradient) steht im Expander „
 - **Handbeispiel** (zwei Wege mit je einem Bogen, $c = (3, 5)$, $\hat c = (4, 3)$): gewählt wird Weg 2, SPO-Verlust 2, SPO+ 4, Teilgradient $(2, -2)$, Quadratfehler 5. Entlang $\hat c(t) = c + t\,(1, -2)$ ist SPO+ $= \max(0,\, 6t - 2)$.
 - **Training.** Lineares Modell mit Achsenabschnitt (6 × 40 = 240 Parameter). KQ über `numpy.linalg.lstsq`. SPO+ mit **Adam**, Lernrate 0,05, Vollbatch, **300 Schritte**, Start bei der KQ-Lösung; zurückgegeben wird der Parameter mit dem kleinsten SPO+-Trainingsverlust unter allen besuchten (der Start gehört dazu, der Trainingsverlust des Ergebnisses ist also nie größer als der von KQ). Der Löser läuft in jeder Runde auf allen Trainingsfällen.
 - **Auswertung.** Jede Zelle (Grad, n, Rauschstufe) läuft mit den festen Zufalls-Seeds 0 bis 19, 1000 Testfällen, 5 Merkmalen. Angegeben werden **Median und Spanne (Minimum bis Maximum)** über die Seeds, nie ein einzelner Seed. Die Bänder stehen vorgerechnet in `skw_bands.json` und sind mit `python tools/measure_bands.py` reproduzierbar (einige Minuten; Zufall nur über den ganzzahligen SplitMix64 aus `skw_rng.py`, nie Pythons `hash()`).
-- **Zufallswald nicht live.** Die Zufallswald-Zahlen stammen aus einer **Vormessung mit scikit-learn** (100 Bäume, mindestens 5 Fälle je Blatt, nicht abgestimmt, 20 Seeds), eingefroren in `skw_wald_vormessung.json` (`tools/freeze_wald.py`); scikit-learn gehört nicht zu den Laufzeit-Paketen. In der App und hier heißt das Verfahren „Zufallswald (Vormessung, nicht live)“. Die Vormessung hat eine andere Zufallsquelle, ihre SPO+-Spalte benutzt 600 statt 300 Adam-Schritte: Zahlen der Vormessung und dieser Demo sind vergleichbar, nicht gleich.
+- **Random Forest nicht live.** Die Random Forest-Zahlen stammen aus einer **Vormessung mit scikit-learn** (100 Bäume, mindestens 5 Fälle je Blatt, nicht abgestimmt, 20 Seeds), eingefroren in `skw_wald_vormessung.json` (`tools/freeze_wald.py`); scikit-learn gehört nicht zu den Laufzeit-Paketen. In der App und hier heißt das Verfahren „Random Forest (Vormessung, nicht live)“. Die Vormessung hat eine andere Zufallsquelle, ihre SPO+-Spalte benutzt 600 statt 300 Adam-Schritte: Zahlen der Vormessung und dieser Demo sind vergleichbar, nicht gleich.
 - **Trainierte Zahlen sind plattformabhängig** (Adam, Gleitkomma, Löserentscheidungen bei knappen Unterschieden). Die Tests prüfen sie deshalb nur als Bänder und Ungleichungen; exakt geprüft werden nur Rechnungen ohne Training.
 
 ## Befunde (gemessen, keine Behauptungen)
@@ -123,7 +123,7 @@ Alle Zahlen dieses Abschnitts stammen aus `skw_bands.json` (eigene Messung: line
 | 4 | 13,6 % | 14,6 % | 6 von 100 | 0,94 Punkte |
 | 6 | 13,7 % | 14,2 % | 29 von 100 | 0,53 Punkte |
 
-### Zufallswald und SPO+ der Vormessung (Grad 6, nicht live, Zufalls-Seeds und Zufallsquelle der Vormessung)
+### Random Forest und SPO+ der Vormessung (Grad 6, nicht live, Zufalls-Seeds und Zufallsquelle der Vormessung)
 
 Quelle: `entscheidungsorientiert-planung/vormessung/out_eo_v1_sp.txt` (Vormessung mit scikit-learn, 20 Seeds, 1000 Testfälle, SPO+ dort mit 600 Adam-Schritten), eingefroren in `skw_wald_vormessung.json`. Messung der Vormessung, nicht in dieser Demo gerechnet und nicht im Test nachgerechnet; der Test prüft nur, dass die Datei diese Zahlen enthält.
 
@@ -136,7 +136,7 @@ Quelle: `entscheidungsorientiert-planung/vormessung/out_eo_v1_sp.txt` (Vormessun
 | 1000 | 0,5 | 12,6 % | 0,88 | 1,05 | 11,8 % | 18 von 20 |
 | 5000 | 0,5 | 11,5 % | 0,71 | 1,09 | 11,6 % | 19 von 20 |
 
-Der Zufallswald ist unabgestimmt (100 Bäume, keine Wahl der Blattgröße); die Zahlen sind kein Urteil über Zufallswälder. Bei Grad 6, Rauschstufe 0,5 und n = 5000 sind Wald (11,5 %) und SPO+ (11,6 %) in der Vormessung gleichauf, KQ liegt bei 12,2 % (Rohausgabe).
+Der Random Forest ist unabgestimmt (100 Bäume, keine Wahl der Blattgröße); die Zahlen sind kein Urteil über Random Forests. Bei Grad 6, Rauschstufe 0,5 und n = 5000 sind Wald (11,5 %) und SPO+ (11,6 %) in der Vormessung gleichauf, KQ liegt bei 12,2 % (Rohausgabe).
 
 ### Prüfungen des Lösers und der Verluste
 
@@ -150,7 +150,7 @@ Der Zufallswald ist unabgestimmt (100 Bäume, keine Wahl der Blattgröße); die 
 - **„Bei n = 100 mit Rauschen verliert SPO+ gegen KQ“ (Plan: Grad 6, 2 von 20 Seeds besser) stimmt für Grad 6 nur schwach.** In dieser Demo ist SPO+ bei Grad 6, n = 100, Rauschstufe 0,5 in 10 von 20 Seeds besser (Median 14,4 gegen 14,0 %). Eine Stabilitätsprobe mit 100 weiteren Seeds ergibt 29 von 100 und im Median 0,5 Punkte zu Lasten von SPO+; auch 600 oder 1000 statt 300 Schritte bringen die „2 von 20“ nicht zurück (10 und 9 von 20). Die Abweichung liegt demnach nicht an der Schrittzahl; die naheliegende Erklärung sind Seeds und Zufallsquelle (nicht weiter zerlegt). Deutlich schlechter als KQ ist SPO+ bei n = 100 mit Rauschen in den Welten mit Grad 1, 2 und 4 (1, 0 und 0 von 20 Seeds besser). Das Preset „Wenig Daten mit Rauschen“ benutzt deshalb Grad 4.
 - **Strafe und früher Abbruch:** Die Aussage „helfen mit Rauschen nicht“ bleibt als „nicht erkennbar“ (Mediane über 20 Seeds: 14,16 bis 14,39 % für die SPO+-Varianten gegen 14,03 % für KQ; keine der Varianten hat einen Median unter KQ, nicht auf Signifikanz geprüft). Ohne Rauschen liegt λ = 0,1 mit 1,04 knapp unter 1,15 % (Unterschied klein, nicht auf Signifikanz geprüft) und damit weniger deutlich als in der Vormessung (1,02 gegen 1,34 %); λ = 1 liegt wie dort darüber.
 - **Hinweis „SPO+ ist nach 25 Schritten fast am Endwert“** war in der Vormessung eine offene Messlücke; sie ist jetzt gemessen, mit der Einschränkung der Welt ohne Rauschen (Median 99 % des Gewinns, Spanne 93 bis 104 %).
-- **Nur Zufallswald aus der Vormessung:** scikit-learn gehört nicht zu den Laufzeit-Paketen; ein numpy-Wald ist nicht gebaut. Die Zahlen des Waldes (Regret und Quadratfehler) sind damit auf den Zellen der Vormessung festgelegt und nicht live veränderbar.
+- **Nur Random Forest aus der Vormessung:** scikit-learn gehört nicht zu den Laufzeit-Paketen; ein numpy-Wald ist nicht gebaut. Die Zahlen des Waldes (Regret und Quadratfehler) sind damit auf den Zellen der Vormessung festgelegt und nicht live veränderbar.
 - **Messung gegen die flexible Klasse nur als Hinweis:** Die Vormessung mit Gauß-Kern-Ridge (Grad 6, ohne Rauschen, n = 1000, 20 Seeds, `out_eo_v1d_kernel.txt`, SPO+ dort mit 300 Schritten, scikit-learn, nicht in dieser Demo) ergab Kern-Ridge 0,04 %, SPO+ 0,55 %, KQ 1,87 % im Median; mit Rauschen 0,5 (n = 1000) 11,33 % gegen 11,84 % (SPO+) und 12,47 % (KQ), bei n = 300 aber 12,50 % gegen 12,44 % (SPO+ knapp vorn) und bei n = 100 13,54 % gegen 14,35 % (SPO+), wobei KQ mit 13,43 % vorn liegt: ohne Rauschen klar, mit Rauschen weder klar noch durchgängig. Der Satz der Demo heißt darum „rettet das falsche lineare Modell“.
 
 ## Ehrliche Grenzen
@@ -201,7 +201,7 @@ Die Suite hat **176 Tests**.
 | `skw_rng.py`, `skw_grid.py`, `skw_world.py`, `skw_losses.py`, `skw_training.py`, `skw_runs.py` | Kern ohne Streamlit (siehe „Weitergabe“) |
 | `skw_bands.py` | lädt die vorgerechneten Bänder |
 | `skw_bands.json` | eigene Messung (`tools/measure_bands.py`) |
-| `skw_wald_vormessung.json` | eingefrorene Zufallswald-Zahlen der Vormessung (`tools/freeze_wald.py`) |
+| `skw_wald_vormessung.json` | eingefrorene Random Forest-Zahlen der Vormessung (`tools/freeze_wald.py`) |
 | `skw_constants.py` | Regler-Grenzen, feste Annahmen, Farben, Presets |
 | `skw_evaluation.py` | Handbeispiel, Zahlen der Experimente, Verdikte (reine Funktionen), Tabellen aus den Bändern |
 | `skw_layout.py` | Fester Kopf (Stylesheet) |
@@ -213,7 +213,7 @@ Die Suite hat **176 Tests**.
 
 ## Bewusst nicht umgesetzt
 
-- **Zufallswald live:** braucht scikit-learn, das nicht zu den Laufzeit-Paketen gehört; die Zahlen sind eingefroren.
+- **Random Forest live:** braucht scikit-learn, das nicht zu den Laufzeit-Paketen gehört; die Zahlen sind eingefroren.
 - **Flexible Modellklassen (Kern-Ridge, Wald) als Gegner von SPO+ in der App:** die Frage, wann welcher Weg gewinnt, ist hier nur als Hinweis auf die Vormessung enthalten.
 - **Andere Gittergrößen, andere Wahrheiten, Minibatches, Lernratenwahl, Kreuzvalidierung der Strafe:** nicht gemessen.
 - **Beweis der Konsistenz von SPO+ und Konvergenzraten:** nicht Gegenstand; die Demo zeigt den Mechanismus und Messungen.
